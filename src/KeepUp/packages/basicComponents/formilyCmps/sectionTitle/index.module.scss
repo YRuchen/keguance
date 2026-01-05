@@ -1,0 +1,13 @@
+.wrapper {
+  line-height: 16px;
+  font-weight: bold;
+  padding: 6px 6px 6px 10px;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+  &.primary {
+    border-left: 6px solid $primaryColor;
+  }
+  &.danger {
+    border-left: 6px solid $dangerColor;
+  }
+}

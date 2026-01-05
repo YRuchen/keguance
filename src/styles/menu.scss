@@ -1,0 +1,11 @@
+@mixin menu-item {
+  font-size: 13px!important;
+  &:hover {
+    background-color: #F0F3F7!important;
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 13px;
+    letter-spacing: 0%;
+    color: #41464F!important;
+  }
+}

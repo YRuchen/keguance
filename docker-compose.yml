@@ -1,0 +1,31 @@
+services:
+  dev:
+    image: node:18-alpine
+    container_name: obs-frontend-dev
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - .:/app
+    working_dir: /app
+    ports:
+      - '5173:5173'
+    networks:
+      - obs-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV}
+    image: obs-frontend:${NODE_ENV}
+    container_name: obs-frontend-${NODE_ENV}
+    ports:
+      - '8180:80'
+    networks:
+      - obs-network
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+
+networks:
+  obs-network:
+    driver: bridge

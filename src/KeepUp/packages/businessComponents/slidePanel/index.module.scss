@@ -1,0 +1,14 @@
+.container {
+  width: fit-content;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 9;
+  transition-duration: 0.3s;
+  transition-property: all;
+  background-color: #fff;
+}
+.shadowRight {
+  box-shadow: 0 5px 5px 0 #eee;
+}

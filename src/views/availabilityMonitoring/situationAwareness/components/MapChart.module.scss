@@ -1,0 +1,97 @@
+.mapChart {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.chartTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.chartWrapper {
+  flex: 1;
+  display: flex;
+  gap: 16px;
+  min-height: 240px;
+  // 确保容器不会超出父元素
+  min-width: 0;
+  width: 100%;
+}
+
+.chartContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  // 确保内容不会溢出
+  overflow: hidden;
+}
+
+.chartContainer {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+}
+
+// 地图 tooltip 全局样式，复用 overview 页面样式，保证使用 buildMapOption 的地方统一
+:global(.tooltip-simple) {
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+:global(.tooltip-card) {
+  width: 260px;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 10px;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+:global(.tooltip-card-header) {
+  background: #409EFF;
+  padding: 10px 14px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+:global(.tooltip-card-body) {
+  padding: 12px 15px;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+:global(.tooltip-avg) {
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+:global(.tooltip-detail-row) {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
+
+:global(.tooltip-isp) {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+:global(.tooltip-city) {
+  margin-right: 6px;
+}

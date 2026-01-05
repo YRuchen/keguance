@@ -1,0 +1,43 @@
+.main {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #fff;
+
+  > :global(.el-space__item) {
+    &:nth-child(1) {
+      width: 160px;
+      height: 100%;
+    }
+
+    &:nth-child(2) {
+      flex: 1;
+      height: 100%;
+    }
+  }
+
+  :global(.formily-element-plus-form-item-label-content) {
+    width: 60px;
+  }
+
+  .infoPanelGroup {
+    width: 100%;
+    padding: 16px 16px 0 16px;
+    box-sizing: border-box;
+  }
+
+  .commonPage {
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+.hoverIcon {
+  width: 22px;
+  vertical-align: middle;
+
+  &:hover {
+    content: url('~/assets/image/charts/ai_entrance_hover.svg');
+  }
+}

@@ -1,0 +1,31 @@
+.container {
+  width: 100%;
+
+  .text {
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 18px;
+  }
+}
+
+.num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
+  font-family: PingFang SC, PingFang SC;
+  font-size: 16px;
+
+  color: #999999;
+  background-color: #fff;
+  border: 2px solid #999999;
+  font-weight: 600;
+}
+
+.divider {
+  margin: 20px;
+  // width: 90%;
+}

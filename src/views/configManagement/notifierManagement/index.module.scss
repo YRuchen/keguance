@@ -1,0 +1,8 @@
+.container {
+  width: 100%;
+  height: 100%;
+  :global(.el-tab-pane) {
+    width: 100%;
+    height: 100%;
+  }
+}

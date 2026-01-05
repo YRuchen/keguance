@@ -1,0 +1,14 @@
+.tablePage {
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  :global(.el-pagination) {
+    margin-top: 0 !important;
+    padding: 12px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}

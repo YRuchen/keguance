@@ -1,0 +1,14 @@
+.container {
+  width: 100%;
+  height: auto;
+  > :global(.el-space__item) {
+    width: 100%;
+    height: auto;
+    &:nth-child(2) {
+      justify-content: flex-end;
+    }
+  }
+  :global(.el-pagination) {
+    flex: none!important;
+  }
+}

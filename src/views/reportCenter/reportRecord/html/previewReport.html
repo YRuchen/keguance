@@ -1,0 +1,1085 @@
+<!--
+  HTML 报告模板 - 与 previewReport.vue 保持一致
+  
+  数据结构（与 Vue 组件相同）：
+  - statistics: { name, startDate, endDate, abnormalNum, totalNum, normalNum, wow }
+  - tableData: [{ id, taskLabel, abnormalNum, proportion }] (proportion 为百分比字符串，如 "62.50")
+  - wowData: { category: string[], path: string[], per: number[], series: [{ name, data: number[] }] }
+  - trendData: { series: [{ name, data: [{ time, value }] }] }
+  - detailData: { '1': { taskType: '1', details: [{ taskName, domain, abnormal, percent/leftTime }] } }
+  - aiAnalyzeData: { conclusion: string, suggestion: string }
+  
+  占位符说明（后端需要替换为实际的 JSON 数据）：
+  {{statistics}} - 统计数据 JSON 对象
+  {{tableData}} - 表格数据 JSON 数组
+  {{wowData}} - 同比环比数据 JSON 对象
+  {{trendData}} - 趋势数据 JSON 对象
+  {{detailData}} - 详情数据 JSON 对象
+  {{aiAnalyzeData}} - AI分析数据 JSON 对象
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="iconfont.css" />
+    <title>域名监测周巡检报告</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+          sans-serif;
+        background: #f5f7fa;
+        padding: 20px;
+        color: #333;
+      }
+
+      .preview-report-page {
+        width: 100%;
+        max-width: 100%;
+        background: #f5f7fa;
+        overflow-x: hidden;
+      }
+
+      .report-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .report-info-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 100%;
+        height: 92px;
+      }
+
+      .gradientRed {
+        background: linear-gradient(180deg, #ff0000 0%, #ffb6b7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+      }
+
+      .report-period {
+        width: 283px;
+        padding: 12px 16px;
+        font-weight: 600;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        font-size: 14px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      .report-period .label {
+        margin-right: 8px;
+        font-size: 16px;
+      }
+
+      .report-period .value {
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+      }
+
+      .report-period .tips {
+        color: #a8abb2;
+        margin: 0 10px;
+      }
+
+      .report-statistics {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      .stat-item {
+        padding: 12px 19px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+
+      .item-flex {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .stat-item .label {
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .stat-item .value {
+        font-weight: 600;
+        font-size: 22px;
+      }
+
+      .stat-item .value.abnormal {
+        color: #f56c6c;
+      }
+
+      .stat-item .value.normal {
+        color: #47c1c1;
+      }
+
+      .stat-item .unit.abnormal {
+        color: #f56c6c;
+      }
+
+      .wow-indicator {
+        font-weight: 600;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      .wow-indicator.up {
+        color: #f56c6c;
+      }
+
+      .wow-indicator.down {
+        color: #47c1c1;
+        background-color: #47c1c11a;
+      }
+
+      .stat-item .tips {
+        color: #a8abb2;
+        margin: auto 14px auto 16px;
+      }
+
+      .chart-wrap {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .chart-wrap.col-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .chart-wrap.col-1 {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        padding: 16px;
+        min-height: 324px;
+      }
+
+      .chart-container.single {
+        min-height: 378px;
+      }
+
+      .chart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+
+      .chart-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .chart-content {
+        width: 100%;
+        height: 100%;
+      }
+
+      .chart-box {
+        width: 100%;
+        height: 300px;
+      }
+
+      .chart-box.trend {
+        height: 316px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+      }
+
+      thead {
+        background: #f5f7fa;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ebeef5;
+      }
+
+      th {
+        font-weight: 600;
+        color: #909399;
+        font-size: 14px;
+      }
+
+      td {
+        color: #606266;
+        font-size: 14px;
+      }
+
+      tbody tr:hover {
+        background: #f5f7fa;
+      }
+
+      .abnormal-details-section {
+        margin-top: 16px;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 16px;
+      }
+
+      .detail-module {
+        border-radius: 8px;
+        margin-bottom: 16px;
+        width: 100%;
+        max-width: 100%;
+        background-color: #ffffff;
+      }
+
+      .detail-module-title {
+        padding: 15px 0 6px 16px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+      }
+
+      .ai-suggestions-section {
+        margin-top: 16px;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .ai-content-block {
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 12px 16px 31px 16px;
+        color: #303133;
+      }
+
+      .ai-content-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 24px;
+      }
+
+      .ai-content-body {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .ai-content-item {
+        margin-bottom: 8px;
+      }
+
+      .ai-content-label {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #303133;
+      }
+
+      .ai-content-text {
+        line-height: 1.6;
+        word-wrap: break-word;
+      }
+
+      .no-shadow {
+        box-shadow: none !important;
+        padding-top: 0;
+        background-color: unset;
+      }
+
+      #detailModulesContainer .chart-box {
+        height: 360px;
+      }
+
+      #detailModulesContainer table {
+        max-height: 360px;
+        overflow-y: auto;
+        display: block;
+      }
+
+      #detailModulesContainer thead {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+      }
+
+      #detailModulesContainer tbody {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-report-page">
+      <!-- 第一行：标题 -->
+      <div class="report-title" id="reportTitle">域名监测周巡检报告</div>
+
+      <!-- 第二行：报告周期和统计数据 -->
+      <div class="report-info-row">
+        <div class="report-period">
+          <span class="label">报告周期</span>
+          <span class="value" id="reportPeriod">
+            <i class="iconfont icon-menu_logs"></i>
+            <span id="startDate">-</span>
+            <span class="tips">至</span>
+            <span id="endDate">-</span>
+          </span>
+        </div>
+        <div class="report-statistics">
+          <div class="stat-item">
+            <span class="label">本周告警任务数</span>
+            <div class="item-flex">
+              <i class="iconfont icon-e911_emergency gradientRed"></i>
+              <span class="value abnormal" id="abnormalNum">0</span>
+              <span class="unit abnormal">个</span>
+              <span class="tips">较上周</span>
+              <span class="wow-indicator down" id="wowIndicator" style="display: none"></span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <span class="label">本周任务总数</span>
+            <div class="item-flex">
+              <span class="value" id="totalNum">0</span>
+              <span class="unit">个</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <span class="label">本周正常任务数</span>
+            <div class="item-flex">
+              <span class="value" id="normalNum">0</span>
+              <span class="unit">个</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第三行：两个并列图表 -->
+      <div class="chart-wrap col-2">
+        <!-- 表格：各检测类型告警任务占比 -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <span class="chart-title">各检测类型告警任务占比</span>
+          </div>
+          <div class="chart-content">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 80px; text-align: right">排名</th>
+                  <th style="min-width: 200px">检测类型</th>
+                  <th style="width: 180px; text-align: right">本周告警任务数</th>
+                  <th style="width: 120px; text-align: center">占比</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- 表格行将通过JavaScript动态生成 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 柱状图：各检测类型告警任务数同比环比图 -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <span class="chart-title">各检测类型告警任务数同比环比图</span>
+          </div>
+          <div class="chart-content">
+            <div id="wowChart" class="chart-box"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第四行：折线图 -->
+      <div class="chart-wrap col-1">
+        <div class="chart-container single">
+          <div class="chart-header">
+            <span class="chart-title">各检测类型告警任务数时间趋势图</span>
+          </div>
+          <div class="chart-content">
+            <div id="trendChart" class="chart-box trend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第五行：异常任务详情 -->
+      <div class="abnormal-details-section">
+        <div class="section-title">异常任务详情</div>
+        <div id="detailModulesContainer">
+          <!-- 详情模块将通过JavaScript动态生成 -->
+        </div>
+      </div>
+
+      <!-- 第六行：AI智能建议 -->
+      <div class="ai-suggestions-section">
+        <div class="section-title">AI智能建议</div>
+        <div class="ai-content-block">
+          <div class="ai-content-title">AI智能诊断总结</div>
+          <div class="ai-content-body" id="aiContentBody">
+            <!-- AI内容将通过JavaScript动态生成 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 引入模拟数据（用于本地测试，后端使用时可以删除此行） -->
+    <script src="mockData.js"></script>
+
+    <script>
+      // 转换表格数据（各检测类型告警任务占比）- 与 convertTableData 保持一致
+      function convertTableData(abnormalList) {
+        if (!abnormalList || abnormalList.length === 0) {
+          return []
+        }
+        return abnormalList.map((item, index) => ({
+          id: item.id || index + 1,
+          taskLabel: item.taskLabel || item.taskName || '-',
+          abnormalNum: item.abnormalNum || 0,
+          proportion: item.proportion || '0.00', // 已经是百分比字符串
+        }))
+      }
+
+      // 转换趋势数据 - 与 convertTrendData 保持一致
+      function convertTrendData(data) {
+        if (!data || !data.series || data.series.length === 0) {
+          return null
+        }
+        return {
+          series: data.series.map((item) => ({
+            name: item.taskName || item.name || '',
+            data: (item.data || []).map((d) => ({
+              time: d.time || '',
+              value: d.value || 0,
+            })),
+          })),
+        }
+      }
+
+      function getTaskTypeLabel(taskType) {
+        const typeMap = {
+          1: '劫持检测',
+          2: 'DNS检测',
+          3: '被墙检测',
+          4: '污染检测',
+          5: 'SSL检测',
+          6: '域名过期检测',
+          7: 'ICP备案检测',
+        }
+        return typeMap[taskType] || taskType
+      }
+
+      function getChartTitle(taskType) {
+        const titleMap = {
+          1: '劫持检测占比任务TOP10',
+          2: 'DNS检测占比任务TOP10',
+          3: '被墙检测占比任务TOP10',
+          4: '污染检测占比任务TOP10',
+          5: 'SSL检测占比任务TOP10',
+          6: '域名过期检测占比任务TOP10',
+          7: 'ICP备案检测占比任务TOP10',
+        }
+        return titleMap[taskType] || '异常任务TOP10'
+      }
+
+      // 构建同比环比柱状图配置 - 与 WowBarChart 组件保持一致
+      function buildWowChartOption(wowData) {
+        if (!wowData || !wowData.category || !wowData.series || wowData.series.length === 0) {
+          return {}
+        }
+
+        const linearGradient = (offset0, offset1) => {
+          return {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: offset0 },
+              { offset: 1, color: offset1 },
+            ],
+          }
+        }
+
+        const colors = [
+          linearGradient('#E5E5E5', '#D0D0D0'), // 上周 - 浅灰色
+          linearGradient('#7BB8FF', '#007DFF'), // 本周 - 蓝色
+        ]
+
+        const categories = wowData.category || []
+        const series = wowData.series || []
+        const paths = wowData.path || []
+        const pers = wowData.per || []
+
+        return {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow',
+            },
+          },
+          legend: {
+            data: series.map((s) => s.name || ''),
+            bottom: 0,
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '15%',
+            containLabel: true,
+          },
+          xAxis: {
+            type: 'category',
+            data: categories,
+            axisTick: {
+              alignWithLabel: true,
+            },
+            axisLabel: {
+              interval: 0,
+              rotate: 45,
+            },
+          },
+          yAxis: {
+            type: 'value',
+          },
+          series: series.map((s, seriesIndex) => {
+            const showLabel = seriesIndex === 1 && paths.length > 0 && pers.length > 0
+
+            return {
+              name: s.name || '',
+              type: 'bar',
+              data: (s.data || []).map((value, index) => {
+                const dataItem = { value }
+
+                if (showLabel && index < paths.length && index < pers.length) {
+                  const path = paths[index]
+                  const per = pers[index]
+                  const perText = per !== undefined ? `${Math.abs(per).toFixed(1)}%` : ''
+                  const isTrend = path === 'up' || path === 'down'
+                  const triangle = path === 'up' ? '▲' : '▼'
+
+                  dataItem.label = {
+                    show: true,
+                    position: 'top',
+                    formatter: isTrend
+                      ? `{triangle|${triangle}} {text|${perText}}`
+                      : `{normal|${perText}}`,
+                    rich: {
+                      triangle: {
+                        color: path === 'up' ? '#F56C6C' : '#47C1C1',
+                        fontSize: 12,
+                        fontWeight: 'bold',
+                      },
+                      text: {
+                        color: '#303133',
+                        fontSize: 12,
+                        fontWeight: 'bold',
+                      },
+                      normal: {
+                        color: '#909399',
+                        fontSize: 12,
+                        fontWeight: 'normal',
+                      },
+                    },
+                  }
+                }
+
+                return dataItem
+              }),
+              barWidth: 18,
+              itemStyle: {
+                borderRadius: [4, 4, 0, 0],
+                color: colors[seriesIndex],
+              },
+              emphasis: {
+                focus: 'series',
+              },
+            }
+          }),
+        }
+      }
+
+      // 构建趋势折线图配置 - 与 LineChart 组件保持一致
+      function buildTrendChartOption(trendData) {
+        if (!trendData || !trendData.series || trendData.series.length === 0) {
+          return {}
+        }
+
+        const linearGradient = (offset0, offset1) => {
+          return {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: offset0 },
+              { offset: 1, color: offset1 },
+            ],
+          }
+        }
+
+        const colors = [
+          linearGradient('#007DFF', '#7BB8FF'),
+          linearGradient('#47C1C1', '#A8EBEB'),
+          linearGradient('#F56C6C', '#FFB6B7'),
+          linearGradient('#21C0FFCC', '#21C0FF99'),
+          linearGradient('#007DFFCC', '#007DFF99'),
+          linearGradient('#C29CFFCC', '#C29CFF99'),
+          linearGradient('#7E6EE3CC', '#7E6EE399'),
+          linearGradient('#21C0FFCC', '#21C0FF99'),
+        ]
+
+        const firstSeries = trendData.series[0]
+        if (!firstSeries || !firstSeries.data || firstSeries.data.length === 0) {
+          return {}
+        }
+
+        const timeData = firstSeries.data.map((item) => item.time)
+
+        return {
+          tooltip: {
+            trigger: 'axis',
+          },
+          legend: {
+            data: trendData.series.map((s) => s.name),
+            bottom: 0,
+            itemWidth: 12,
+            itemHeight: 12,
+            icon: 'circle',
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: trendData.series.length > 5 ? '20%' : '15%',
+            containLabel: true,
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: timeData,
+            axisLabel: {
+              interval: 0,
+            },
+          },
+          yAxis: {
+            type: 'value',
+          },
+          series: trendData.series
+            .filter((s) => s.data && s.data.length > 0)
+            .map((s, index) => ({
+              name: s.name,
+              type: 'line',
+              data: s.data.map((item) => item.value),
+              itemStyle: {
+                color: colors[index % colors.length] || '#5470c6',
+              },
+              lineStyle: {
+                color: colors[index % colors.length] || '#5470c6',
+              },
+              smooth: true,
+            })),
+        }
+      }
+
+      // 构建详情模块横向柱状图配置 - 与 TaskTop10BarChart 组件保持一致
+      function buildDetailChartOption(detail, unit) {
+        if (!detail || !detail.details || detail.details.length === 0) {
+          return {}
+        }
+
+        const top10 = detail.details.slice(0, 10)
+        const category = top10.map((item) => item.taskName || '-')
+
+        const data = top10.map((item) => {
+          if (detail.taskType === '2') {
+            const leftTimeStr = item.leftTime || '0'
+            return parseFloat(leftTimeStr.toString().replace('ms', '')) || 0
+          } else {
+            const percent = parseFloat(item.percent?.toString() || '0') || 0
+            return percent > 1 ? percent : percent * 100
+          }
+        })
+
+        const linearGradient = {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 1,
+          y2: 0,
+          colorStops: [
+            { offset: 0, color: '#AFD6FF' },
+            { offset: 1, color: '#E0EFFF' },
+          ],
+        }
+
+        return {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow',
+            },
+            formatter: (params) => {
+              const param = params[0]
+              const index = param.dataIndex
+              const item = top10[index]
+              const domain = item?.domain || '-'
+              const value = param.value
+              return `${param.name}<br/>${value}${unit}<br/>${domain}`
+            },
+          },
+          grid: {
+            left: '3%',
+            right: '15%',
+            bottom: '3%',
+            top: '3%',
+            containLabel: true,
+          },
+          xAxis: {
+            type: 'value',
+            axisLabel: {
+              show: false,
+            },
+            splitLine: {
+              lineStyle: {
+                type: 'dashed',
+              },
+            },
+          },
+          yAxis: {
+            type: 'category',
+            data: category,
+            inverse: true,
+            axisLabel: {
+              formatter: (value) => {
+                return value.length > 15 ? value.substring(0, 15) + '...' : value
+              },
+            },
+          },
+          series: [
+            {
+              name: detail.taskType === '2' ? '平均响应时间' : '占比',
+              type: 'bar',
+              data: data,
+              itemStyle: {
+                color: linearGradient,
+                borderRadius: [0, 4, 4, 0],
+              },
+              barWidth: '18',
+              label: {
+                show: true,
+                position: 'insideLeft',
+                formatter: (params) => {
+                  const index = params.dataIndex
+                  const item = top10[index]
+                  const domain = item?.domain || '-'
+                  return `${params.value.toFixed(2)}${unit} ${domain}`
+                },
+                color: '#333',
+              },
+              emphasis: {
+                focus: 'series',
+              },
+            },
+          ],
+        }
+      }
+
+      // ==================== 渲染函数 ====================
+
+      // 生成表格行HTML
+      function generateTableRows(tableData) {
+        return tableData
+          .map((item) => {
+            const rankHtml =
+              item.id <= 3
+                ? `<span style="color: ${
+                    ['#FF0000', '#FF8400', '#FFC800'][item.id - 1]
+                  }; margin-right: 4px;">●</span>${item.id}`
+                : item.id
+            return `
+          <tr>
+            <td style="text-align: right;">${rankHtml}</td>
+            <td>${item.taskLabel || '-'}</td>
+            <td style="text-align: right;">${item.abnormalNum || 0}</td>
+            <td style="text-align: center;">${item.proportion || '0.00'}%</td>
+          </tr>
+        `
+          })
+          .join('')
+      }
+
+      // 生成详情模块HTML
+      function generateDetailModule(taskType, detailData) {
+        const taskTypeLabel = getTaskTypeLabel(taskType)
+        const chartTitle = getChartTitle(taskType)
+        const chartId = `detailChart_${taskType}`
+        const tableId = `detailTable_${taskType}`
+        const unit = taskType === '2' ? 'ms' : '%'
+        const top10 = detailData.details.slice(0, 10)
+        const tableRows = top10
+          .map((item, index) => {
+            const rank = index + 1
+            const rankHtml =
+              rank <= 3
+                ? `<span style="color: ${
+                    ['#FF0000', '#FF8400', '#FFC800'][rank - 1]
+                  }; margin-right: 4px;">●</span>${rank}`
+                : rank
+            return `
+          <tr>
+            <td style="text-align: right;">${rankHtml}</td>
+            <td>${item.taskName || '-'}</td>
+            <td style="text-align: center;">${item.domain || '-'}</td>
+            <td style="text-align: center;">${item.abnormal || 0}</td>
+          </tr>
+        `
+          })
+          .join('')
+
+        return `
+        <div class="detail-module">
+          <div class="detail-module-title">${taskTypeLabel}</div>
+          <div class="chart-wrap col-2">
+            <div class="chart-container no-shadow">
+              <div class="chart-header">
+                <span class="chart-title">${chartTitle}</span>
+              </div>
+              <div class="chart-content">
+                <div id="${chartId}" class="chart-box" style="height: 360px;"></div>
+              </div>
+            </div>
+            <div class="chart-container no-shadow">
+              <div class="chart-header">
+                <span class="chart-title">${chartTitle}</span>
+              </div>
+              <div class="chart-content">
+                <table id="${tableId}">
+                  <thead>
+                    <tr>
+                      <th style="width: 80px; text-align: right;">排名</th>
+                      <th style="min-width: 200px;">任务名称</th>
+                      <th style="width: 180px; text-align: center;">监控对象</th>
+                      <th style="width: 150px; text-align: center;">本周告警任务数</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${tableRows}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+      }
+
+      // 初始化详情模块图表
+      function initDetailCharts(detailData) {
+        Object.keys(detailData).forEach((taskType) => {
+          const detail = detailData[taskType]
+          const chartId = `detailChart_${taskType}`
+          const chartElement = document.getElementById(chartId)
+
+          if (!chartElement) return
+
+          const unit = detail.taskType === '2' ? 'ms' : '%'
+          const option = buildDetailChartOption(detail, unit)
+          const chart = echarts.init(chartElement)
+          chart.setOption(option)
+        })
+      }
+
+      // 渲染AI内容（支持Markdown格式）
+      function renderAiContent(aiAnalyzeData) {
+        if (!aiAnalyzeData) return ''
+
+        let html = ''
+
+        if (aiAnalyzeData.conclusion) {
+          html += `
+          <div class="ai-content-item">
+            <div class="ai-content-label">AI 本周巡检结论：</div>
+            <div class="ai-content-text">${formatMarkdown(aiAnalyzeData.conclusion)}</div>
+          </div>
+        `
+        }
+
+        if (aiAnalyzeData.suggestion) {
+          html += `
+          <div class="ai-content-item">
+            <div class="ai-content-label">AI 优化建议：</div>
+            <div class="ai-content-text">${formatMarkdown(aiAnalyzeData.suggestion)}</div>
+          </div>
+        `
+        }
+
+        return html
+      }
+
+      // 简单的Markdown格式化（转换为HTML）
+      function formatMarkdown(text) {
+        if (!text) return ''
+        return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>')
+      }
+
+      // 主渲染函数
+      function renderReport(data) {
+        // 渲染基本信息
+        const statistics = data.statistics || {}
+        document.getElementById('reportTitle').textContent = statistics.name || '域名监测周巡检报告'
+        document.getElementById('startDate').textContent = statistics.startDate || '-'
+        document.getElementById('endDate').textContent = statistics.endDate || '-'
+
+        // 渲染统计数据
+        document.getElementById('abnormalNum').textContent = statistics.abnormalNum || 0
+        document.getElementById('totalNum').textContent = statistics.totalNum || 0
+        document.getElementById('normalNum').textContent = statistics.normalNum || 0
+
+        // 渲染环比指示器
+        const wowIndicator = document.getElementById('wowIndicator')
+        if (statistics.wow !== undefined && statistics.wow !== null) {
+          const wowValue = statistics.wow
+          const isUp = wowValue >= 0
+          wowIndicator.className = `wow-indicator ${isUp ? 'up' : 'down'}`
+          wowIndicator.textContent = `${isUp ? '▲' : '▼'}${Math.abs(wowValue).toFixed(1)}%`
+          wowIndicator.style.display = ''
+        }
+
+        // 渲染表格
+        const tableData = convertTableData(data.tableData || [])
+        document.getElementById('tableBody').innerHTML = generateTableRows(tableData)
+
+        // 渲染同比环比图表
+        if (data.wowData) {
+          const wowOption = buildWowChartOption(data.wowData)
+          const wowChart = echarts.init(document.getElementById('wowChart'))
+          wowChart.setOption(wowOption)
+        }
+
+        // 渲染趋势图表
+        if (data.trendData) {
+          const trendDataConverted = convertTrendData(data.trendData)
+          if (trendDataConverted) {
+            const trendOption = buildTrendChartOption(trendDataConverted)
+            const trendChart = echarts.init(document.getElementById('trendChart'))
+            trendChart.setOption(trendOption)
+          }
+        }
+
+        // 渲染详情模块
+        const detailModulesContainer = document.getElementById('detailModulesContainer')
+        if (detailModulesContainer && data.detailData) {
+          const detailModulesHtml = Object.keys(data.detailData)
+            .map((taskType) => generateDetailModule(taskType, data.detailData[taskType]))
+            .join('')
+          detailModulesContainer.innerHTML = detailModulesHtml
+
+          // 初始化详情图表
+          setTimeout(() => {
+            initDetailCharts(data.detailData)
+          }, 100)
+        }
+
+        // 渲染AI内容
+        const aiContentBody = document.getElementById('aiContentBody')
+        if (aiContentBody && data.aiAnalyzeData) {
+          aiContentBody.innerHTML = renderAiContent(data.aiAnalyzeData)
+        }
+      }
+
+      // ==================== 数据加载和初始化 ====================
+
+      // 页面加载完成后渲染
+      function init() {
+        let reportData = null
+
+        // 检查是否有模拟数据（用于本地测试）
+        if (
+          typeof window !== 'undefined' &&
+          typeof window.mockReportData !== 'undefined' &&
+          window.mockReportData
+        ) {
+          console.log('使用模拟数据')
+          reportData = window.mockReportData
+        } else {
+          // 后端需要替换这些占位符为实际的 JSON 数据
+          // 注意：占位符需要替换为 JSON 字符串，然后使用 JSON.parse 解析
+          // 例如：{{statistics}} 应该被替换为 '{"name":"报告名称","startDate":"2024-01-01",...}'
+          try {
+            const statisticsStr = '{{statistics}}'
+            const tableDataStr = '{{tableData}}'
+            const wowDataStr = '{{wowData}}'
+            const trendDataStr = '{{trendData}}'
+            const detailDataStr = '{{detailData}}'
+            const aiAnalyzeDataStr = '{{aiAnalyzeData}}'
+
+            // 检查占位符是否已被替换（如果还是占位符格式，说明未替换）
+            const isPlaceholder = (str) => str.startsWith('{{') && str.endsWith('}}')
+
+            reportData = {
+              statistics: isPlaceholder(statisticsStr) ? {} : JSON.parse(statisticsStr || '{}'),
+              tableData: isPlaceholder(tableDataStr) ? [] : JSON.parse(tableDataStr || '[]'),
+              wowData: isPlaceholder(wowDataStr) ? null : JSON.parse(wowDataStr || '{}'),
+              trendData: isPlaceholder(trendDataStr) ? null : JSON.parse(trendDataStr || '{}'),
+              detailData: isPlaceholder(detailDataStr) ? {} : JSON.parse(detailDataStr || '{}'),
+              aiAnalyzeData: isPlaceholder(aiAnalyzeDataStr)
+                ? {}
+                : JSON.parse(aiAnalyzeDataStr || '{}'),
+            }
+          } catch (error) {
+            console.error('解析数据失败:', error)
+            console.log('请确保后端已正确替换占位符，或引入 mockData.js 进行测试')
+            return
+          }
+        }
+
+        if (reportData) {
+          renderReport(reportData)
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init)
+      } else {
+        init()
+      }
+    </script>
+  </body>
+</html>

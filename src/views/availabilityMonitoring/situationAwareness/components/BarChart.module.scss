@@ -1,0 +1,76 @@
+.barChart {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .gap {
+    justify-content: unset;
+    gap: 8px;
+    margin-bottom: 0;
+  }
+
+  margin-bottom: 16px;
+
+  .gap {
+    justify-content: unset;
+    gap: 8px;
+  }
+}
+
+.chartTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.chartWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: row; // 默认左右排列
+  gap: 16px;
+  min-height: 243px;
+  // 确保容器不会超出父元素
+  min-width: 0;
+  width: 100%;
+
+  &.chartWrapperColumn {
+    flex-direction: column;
+
+    .slotContent {
+      order: 0;
+    }
+
+    .chartContent {
+      order: 1;
+    }
+  }
+}
+
+.chartContent {
+  flex: 1;
+  min-width: 0;
+  // 确保内容不会溢出
+  overflow: hidden;
+  // 左右排列时，图表在左边（order: 0），slot 在右边（order: 1）
+  order: 0;
+}
+
+.slotContent {
+  // 左右排列时，slot 在右边
+  order: 1;
+}
+
+.chartContainer {
+  width: 100%;
+  height: 100%;
+  min-height: 243px;
+}

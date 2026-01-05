@@ -1,0 +1,211 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 5006799 */
+  src: url('iconfont.woff2?t=1767589555934') format('woff2'),
+       url('iconfont.woff?t=1767589555934') format('woff'),
+       url('iconfont.ttf?t=1767589555934') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-menu_trace:before {
+  content: "\e62e";
+}
+
+.icon-menu_dashboard:before {
+  content: "\e62f";
+}
+
+.icon-menu_monitor:before {
+  content: "\e62c";
+}
+
+.icon-menu_metrics:before {
+  content: "\e62d";
+}
+
+.icon-menu_line:before {
+  content: "\e62b";
+}
+
+.icon-menu_configManagement:before {
+  content: "\e618";
+}
+
+.icon-menu_logs:before {
+  content: "\e61e";
+}
+
+.icon-menu_home_line:before {
+  content: "\e620";
+}
+
+.icon-collapse_line:before {
+  content: "\e628";
+}
+
+.icon-menu_domain:before {
+  content: "\e629";
+}
+
+.icon-pkg_logo:before {
+  content: "\e62a";
+}
+
+.icon-error:before {
+  content: "\e615";
+}
+
+.icon-award_star:before {
+  content: "\e612";
+}
+
+.icon-e911_emergency:before {
+  content: "\e613";
+}
+
+.icon-rocket_launch:before {
+  content: "\e614";
+}
+
+.icon-brick:before {
+  content: "\e625";
+}
+
+.icon-calendar_clock:before {
+  content: "\e626";
+}
+
+.icon-bookmark_manager:before {
+  content: "\e627";
+}
+
+.icon-domain_verification_off:before {
+  content: "\e621";
+}
+
+.icon-brightness_alert:before {
+  content: "\e622";
+}
+
+.icon-health_and_safety:before {
+  content: "\e623";
+}
+
+.icon-dns:before {
+  content: "\e624";
+}
+
+.icon-more_vert:before {
+  content: "\e61a";
+}
+
+.icon-arrow_circle_up:before {
+  content: "\e61b";
+}
+
+.icon-content_copy:before {
+  content: "\e61c";
+}
+
+.icon-right_panel_close:before {
+  content: "\e61d";
+}
+
+.icon-right_panel_open:before {
+  content: "\e61f";
+}
+
+.icon-article_shortcut:before {
+  content: "\e619";
+}
+
+.icon-refresh:before {
+  content: "\e60f";
+}
+
+.icon-setter:before {
+  content: "\e610";
+}
+
+.icon-export:before {
+  content: "\e611";
+}
+
+.icon-double_arrow_down:before {
+  content: "\e60e";
+}
+
+.icon-un-config-o:before {
+  content: "\e6b4";
+}
+
+.icon-trace:before {
+  content: "\e60d";
+}
+
+.icon-log-out-01:before {
+  content: "\e67b";
+}
+
+.icon-linux:before {
+  content: "\e73d";
+}
+
+.icon-kubernetes:before {
+  content: "\e600";
+}
+
+.icon-docker:before {
+  content: "\e60c";
+}
+
+.icon-control_panel:before {
+  content: "\e605";
+}
+
+.icon-asset_management:before {
+  content: "\e606";
+}
+
+.icon-home:before {
+  content: "\e607";
+}
+
+.icon-track_panel:before {
+  content: "\e608";
+}
+
+.icon-monitors_panel:before {
+  content: "\e609";
+}
+
+.icon-logs_panel:before {
+  content: "\e60a";
+}
+
+.icon-availability_monitoring:before {
+  content: "\e60b";
+}
+
+.icon-collapse:before {
+  content: "\e601";
+}
+
+.icon-message:before {
+  content: "\e602";
+}
+
+.icon-event_panel:before {
+  content: "\e603";
+}
+
+.icon-target_panel:before {
+  content: "\e604";
+}
+

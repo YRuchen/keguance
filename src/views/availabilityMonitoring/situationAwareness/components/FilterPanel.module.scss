@@ -1,0 +1,61 @@
+.filterPanel {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.filterRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.timeRadioGroup {
+  :global(.el-radio-button__inner) {
+    padding: 8px 16px;
+  }
+}
+
+.refreshRateSelect {
+  width: 100px;
+}
+
+.lastUpdateTime {
+  font-size: 13px;
+  color: #666;
+}
+
+.refreshBtn {
+  margin-left: 8px;
+}
+
+.filterRight {
+  display: flex;
+  align-items: center;
+}
+
+.customTimeRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+}
+
+.customTimeLabel {
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.customTimeTip {
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+}

@@ -1,0 +1,73 @@
+.dataTable {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  justify-content: space-between;
+
+  .gap {
+    justify-content: unset;
+    margin-bottom: 0;
+    gap: 8px;
+  }
+}
+
+.chartTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.tipIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  color: #666;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background: #e0e0e0;
+    color: #333;
+  }
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.filterSelect {
+  width: 120px;
+}
+
+.tableContainer {
+  flex: 1;
+  overflow: auto;
+
+  :global(.el-table__cell) {
+    padding: 5px 0 !important;
+  }
+}
+
+.domainLink {
+  color: #1677ff;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

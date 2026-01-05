@@ -1,0 +1,6 @@
+.container {
+  :global(.el-tab-pane) {
+    overflow-x: hidden!important;
+    overflow-y: auto!important;
+  }
+}

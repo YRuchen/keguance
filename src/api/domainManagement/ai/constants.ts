@@ -1,0 +1,19 @@
+export enum CHAT_SCENE {
+  GENERAL = 'CHAT_SCENE_GENERAL',
+  DOMAIN = 'CHAT_SCENE_DOMAIN',
+  LINE = 'CHAT_SCENE_LINE',
+  LOGGING = 'CHAT_SCENE_LOGGING',
+}
+
+export const CHAT_SCENE_NAME: Record<CHAT_SCENE, string> = {
+  [CHAT_SCENE.GENERAL]: 'AI聊天',
+  [CHAT_SCENE.DOMAIN]: '域名监测',
+  [CHAT_SCENE.LINE]: '线路监测',
+  [CHAT_SCENE.LOGGING]: '日志监测'
+}
+
+export enum ROLE {
+  USER = 'CHAT_ROLE_USER',
+  ASSISTANT = 'CHAT_ROLE_ASSISTANT'
+}
+

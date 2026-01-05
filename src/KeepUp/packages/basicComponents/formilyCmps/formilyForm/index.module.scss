@@ -1,0 +1,21 @@
+.container {
+  width: 100%;
+  // :global(.formily-element-plus-form-item-label-content) {
+  //   width: 90px;
+  // }
+  :global(.formily-element-plus-form-item-error-help) {
+    text-align: left;
+  }
+  :global(.el-collapse-item__header) {
+    box-sizing: border-box;
+  }
+  /** 让FormStep正常显示 */
+  :global(.el-step__icon) {
+    position: absolute;
+    left: 0;
+  }
+  :global(.el-step__title) {
+    margin-top: 30px;
+  }
+  /** 让FormStep正常显示 */
+}

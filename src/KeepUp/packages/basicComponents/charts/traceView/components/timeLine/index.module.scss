@@ -1,0 +1,13 @@
+.container {
+  width: fit-content;
+  height: 36%;
+  position: absolute;
+  background-color: antiquewhite;
+  .tip {
+    padding-left: 4px;
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+}

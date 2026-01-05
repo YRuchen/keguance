@@ -1,0 +1,13 @@
+.tabs {
+  height: 100%;
+  > .el-tabs__content {
+    height: calc(100% - 190px);
+    overflow-y: auto!important;
+    > .el-tab-pane {
+      overflow-y: auto!important;
+    }
+    > .el-tab-pane:nth-child(n + 2) {
+      height: 100%;
+    }
+  }
+}

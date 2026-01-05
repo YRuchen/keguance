@@ -1,0 +1,33 @@
+.el-table__header th {
+  font-weight: bold;
+  color: #252525;
+  background: #fafafa;
+}
+
+.el-table .el-table__header th {
+  background: var(--el-fill-color-light) !important;
+}
+
+.el-button--primary {
+  &.is-link {
+    color: $primaryColor;
+    font-size: 14px;
+    &:hover {
+      color: lighten($primaryColor, 15%) !important;
+    }
+  }
+}
+
+.el-tabs__header .el-tabs__item {
+  color: $menuText;
+  &.is-active {
+    color: $primaryColor;
+  }
+  &:hover {
+    color: lighten($primaryColor, 15%) !important;
+  }
+}
+
+.el-checkbox__inner {
+  border-radius: $borderRadiusSmall;
+}

@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'APP_VERSION', defaultValue: 'v1.0.0', description: '应用版本号，例如 v1.0.0')
+    }
+
+    environment {
+        // 获取 Git 提交哈希
+        GIT_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+        // 获取当前时间格式化为 YYYYMMDDHHMM
+        BUILD_TIME = sh(script: 'date +%Y%m%d%H%M', returnStdout: true).trim()
+
+        // 构造镜像名称和tag
+        IMAGE_NAME = "obs-frontend"
+        IMAGE_TAG = "${params.APP_VERSION}-${GIT_COMMIT}-${BUILD_TIME}"
+        DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
+        DOCKER_REGISGTY  = "harbor.gainetics.io/observable/images/"
+        DOCKER_IMAGE_URL = "${DOCKER_REGISGTY}${DOCKER_IMAGE}"
+        
+        
+
+    }
+
+    stages {
+        stage('Push Docker Image to ECR') {
+            steps {
+                script {
+                    echo "编译并构建/推送容器镜像"
+                    sh "make build-eks-prod VERSION=${IMAGE_TAG}"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "清理本地镜像和容器"
+            sh """
+                docker rmi -f obs-frontend:eks-production
+                docker rmi -f ${env.DOCKER_IMAGE_URL}
+            """
+        }
+    }
+}

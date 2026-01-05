@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 运行代码检查..."
+
+# 创建一个临时目录来保存运行前工作区的文件状态
+TEMP_DIR=$(mktemp -d)
+trap "rm -rf $TEMP_DIR" EXIT
+
+# 获取暂存区中的文件（lint-staged 会处理这些文件）
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+# 保存运行前工作区中每个文件的内容
+for FILE in $STAGED_FILES; do
+  case "$FILE" in
+    *.js|*.ts|*.jsx|*.tsx|*.vue)
+      if [ -f "$FILE" ]; then
+        # 创建目录结构
+        mkdir -p "$TEMP_DIR/$(dirname "$FILE")" 2>/dev/null || true
+        # 保存工作区文件内容
+        cp "$FILE" "$TEMP_DIR/$FILE" 2>/dev/null || true
+      fi
+      ;;
+  esac
+done
+
+# 运行 lint-staged（会修改工作区文件并自动添加到暂存区）
+npx lint-staged
+LINT_STATUS=$?
+
+if [ $LINT_STATUS -ne 0 ]; then
+  echo ""
+  echo "❌ 代码检查未通过，请修复以上问题后再提交"
+  echo ""
+  exit 1
+fi
+
+echo "✅ 代码检查通过"
+
+echo ""
+echo "🔧 自动修复内容："
+
+# 检测自动修复的内容
+HAS_AUTO_FIXES=false
+
+# 检查每个文件的变化
+for FILE in $STAGED_FILES; do
+  case "$FILE" in
+    *.js|*.ts|*.jsx|*.tsx|*.vue)
+      if [ -f "$FILE" ]; then
+        BEFORE_FILE="$TEMP_DIR/$FILE"
+        CURRENT_FILE="$FILE"
+        
+        # 如果保存了运行前的文件内容
+        if [ -f "$BEFORE_FILE" ] && [ -f "$CURRENT_FILE" ]; then
+          # 比较运行前后的差异
+          if ! cmp -s "$BEFORE_FILE" "$CURRENT_FILE" 2>/dev/null; then
+            HAS_AUTO_FIXES=true
+            echo ""
+            echo "📄 $FILE"
+            
+            # 使用临时文件来解析 diff，避免子 shell 问题
+            DIFF_TEMP=$(mktemp)
+            diff -u "$BEFORE_FILE" "$CURRENT_FILE" > "$DIFF_TEMP" 2>/dev/null || true
+            
+            if [ -s "$DIFF_TEMP" ]; then
+              CURRENT_LINE=0
+              while IFS= read -r LINE || [ -n "$LINE" ]; do
+                # 匹配 @@ 行，提取行号信息（使用 sed 提取，兼容性更好）
+                if echo "$LINE" | grep -qE '^@@ -[0-9]+'; then
+                  NEW_START=$(echo "$LINE" | sed -E 's/^@@ -[0-9]+(,[0-9]+)? \+([0-9]+).*/\2/')
+                  if [ -n "$NEW_START" ] && [ "$NEW_START" != "$LINE" ]; then
+                    CURRENT_LINE=$NEW_START
+                  fi
+                elif [ "${LINE#+}" != "$LINE" ] && [ "${LINE#+++}" = "$LINE" ]; then
+                  # 新增的行（自动修复后的内容），以 + 开头但不是 +++
+                  CONTENT="${LINE#+}"
+                  echo "   行 ${CURRENT_LINE}: + ${CONTENT}"
+                  CURRENT_LINE=$((CURRENT_LINE + 1))
+                elif [ "${LINE#-}" != "$LINE" ] && [ "${LINE#---}" = "$LINE" ]; then
+                  # 删除的行（自动修复前的内容），以 - 开头但不是 ---
+                  CONTENT="${LINE#-}"
+                  echo "   行 ${CURRENT_LINE}: - ${CONTENT}"
+                  # 注意：删除行不增加行号，因为新文件中没有这一行
+                elif [ "${LINE# }" != "$LINE" ] || [ "${LINE#	}" != "$LINE" ] || [ -z "$LINE" ]; then
+                  # 上下文行（未修改的行），以空格或制表符开头，或为空行
+                  CURRENT_LINE=$((CURRENT_LINE + 1))
+                fi
+              done < "$DIFF_TEMP"
+            fi
+            rm -f "$DIFF_TEMP"
+          fi
+        fi
+      fi
+      ;;
+  esac
+done
+
+if [ "$HAS_AUTO_FIXES" = false ]; then
+  echo "   没有检测到自动修复的内容"
+fi
+
+echo ""
+echo "🚀 可以提交了！"

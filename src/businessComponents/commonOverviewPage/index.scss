@@ -1,0 +1,10 @@
+.tabs {
+  height: 100%;
+  > .el-tabs__content {
+    overflow-y: auto;
+    > .el-tab-pane {
+      height: calc(100%);
+      overflow: hidden;
+    }
+  }
+}

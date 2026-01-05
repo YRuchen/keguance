@@ -1,0 +1,5 @@
+.disabled {
+  pointer-events: none!important;           /* 禁止鼠标事件 */
+  user-select: none!important;              /* 禁止选中文本 */
+  cursor: not-allowed !important;
+}

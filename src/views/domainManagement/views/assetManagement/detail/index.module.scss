@@ -1,0 +1,17 @@
+.container {
+  padding: 24px 58px;
+  box-sizing: border-box;
+  :global(.formily-element-plus-form-item-label) {
+    width: 100px;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+  }
+  :global(.formily-element-plus-form-item-feedback-layout-loose) {
+    margin-bottom: 20px;
+  }
+  :global(.formily-element-plus-form-item-label) {
+    height: 22px;
+    line-height: 22px;
+    align-items: center;
+  }
+}

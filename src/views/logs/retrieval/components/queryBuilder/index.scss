@@ -1,0 +1,205 @@
+// .wrapper {
+//   width: 200px;
+//   height: auto;
+//   border: 1px solid #ccc;
+//   min-height: 40px;
+//   padding: 4px;
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: 8px;
+//   position: relative;
+//   top: 0;
+//   left: 0;
+//   // 把下面的输入框盖住，
+//   .conditionItemGroup {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//   }
+//   .inputBox {
+//     display: inline-block;
+//     background: #eee;
+//     padding: 2px 6px;
+//     border-radius: 4px;
+//     min-width: 10px;
+//     outline: none;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//   }
+// }
+
+/* 父容器：让内部元素在一行内流动，换行时自动撑高父容器 */
+.qb-wrapper { 
+  width: 100%; 
+  position: relative; /* 为下拉框提供定位基准 */
+}
+
+.qb-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.qb-inner {
+  border: 1px solid #dcdfe6;
+  padding: 8px 12px;
+  padding-right: 36px; /* 为删除图标留出空间 */
+  min-height: 40px;
+  display: flex;
+  flex-wrap: wrap;     /* 自动换行 */
+  align-items: center;
+  gap: 6px;
+  border-radius: 6px;
+  flex: 1;
+  width: 100%;
+  background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #303133;
+
+  &:focus-within {
+    border-color: #409eff;
+    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.1);
+    outline: none;
+  }
+
+  &:hover:not(:focus-within) {
+    border-color: #c0c4cc;
+  }
+}
+
+.qb-clear-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #909399;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  transition: all 0.2s;
+  z-index: 10;
+  border-radius: 4px;
+
+  &:hover {
+    color: #606266;
+    background-color: #f5f7fa;
+  }
+
+  &:active {
+    color: #303133;
+    background-color: #ebeef5;
+  }
+}
+
+.qb-caret-offset {
+  display: inline-block;
+  width: 30px;
+  min-height: 1em;
+  pointer-events: auto;
+}
+
+/* 小方块：内联块，contentEditable，样式可按需修改 */
+.condition-item {
+  display: inline-flex;    /* 关键：inline 流里占位，不会独占一行 */
+  align-items: center;
+  padding: 4px 10px;
+  padding-right: 28px; // 为删除按钮留出空间
+  min-width: 16px;
+  border-radius: 4px;
+  background: #f0f2f5;
+  border: 1px solid #e4e7ed;
+  outline: none;
+  user-select: text;
+  white-space: nowrap;
+  font-size: 14px;
+  color: #303133;
+  transition: all 0.2s;
+  position: relative;
+
+  // 内容区域
+  &__content {
+    flex: 1;
+    min-width: 0;
+    outline: none;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &:focus-within {
+    border-color: #409eff;
+    background-color: #ecf5ff;
+    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.1);
+  }
+
+  // `:` 后面的操作符显示为橘色
+  &__operator {
+    color: orange;
+    font-weight: 500;
+  }
+  
+  // 只读模式样式
+  &--readonly {
+    background: #f5f7fa;
+    border-color: #e4e7ed;
+    cursor: default;
+    
+    &:focus-within {
+      border-color: #e4e7ed;
+      background-color: #f5f7fa;
+      box-shadow: none;
+    }
+  }
+  
+  // 删除按钮
+  &__delete-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0;
+    min-height: auto;
+    height: 20px;
+    width: 20px;
+    z-index: 10; // 提高 z-index 确保按钮在最上层
+    pointer-events: auto; // 确保可以点击
+    flex-shrink: 0;
+    
+    :deep(.el-icon) {
+      font-size: 14px;
+      color: #909399;
+    }
+    
+    &:hover {
+      :deep(.el-icon) {
+        color: #f56c6c;
+      }
+    }
+  }
+}
+
+/* 末端输入区：与小方块处于同一行流 */
+.qb-input {
+  min-width: 12px;
+  outline: none;
+  border: none;
+  padding: 2px 4px;
+  /* 保持行内行为 */
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* 去掉内容为 empty 时的伪元素留白（可选，根据浏览器） */
+.qb-input:empty::before {
+  content: '';
+}
+

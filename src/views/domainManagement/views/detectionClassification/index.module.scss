@@ -1,0 +1,49 @@
+.container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  .linkList {
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+    padding: 16px;
+    box-sizing: border-box;
+    background-color: #fff;
+    .link {
+      width: 260px;
+      height: 48px;
+      cursor: pointer;
+      border-radius: $borderRadiusBase;
+      border: 1px solid #DBDFE7;
+      padding: 6px 8px;
+      box-sizing: border-box;
+      &:hover {
+        background-color: #007DFF14;
+      }
+      &.active {
+        background-color: #007DFF!important;
+        .text {
+          color: #fff;
+          font-weight: 900;
+          font-size: 14px;
+          line-height: 20px;
+        }
+      }
+      .iconBox {
+        width: 36px;
+        height: 36px;
+        border-radius: $borderRadiusBase;
+        background: radial-gradient(97.22% 97.22% at 2.78% 2.78%, #B6D8FF 0%, #9BC9FF 29.33%, #EAF0FF 66.35%, #B7CBFF 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .text {
+        color: #000;
+        font-weight: 900;
+        font-size: 14px;
+        line-height: 20px;
+      }
+    }
+  }
+}

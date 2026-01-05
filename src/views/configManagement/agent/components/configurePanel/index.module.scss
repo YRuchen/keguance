@@ -1,0 +1,14 @@
+.container {
+  :global(.el-drawer__header) {
+    font-size: 20px;
+    padding: 0 12px;
+    background: #371966;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .tableContainer {
+    width: 100%;
+    margin-top: 20px;
+  }
+}

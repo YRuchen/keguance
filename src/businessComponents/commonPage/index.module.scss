@@ -1,0 +1,69 @@
+.container {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  box-sizing: border-box;
+  > :global(.el-space__item) {
+    width: 100%;
+    height: auto;
+    &:nth-child(3) {
+      flex: 1;
+    }
+  }
+  .extraPane {
+    width: 100%;
+    height: auto;
+  }
+  .filterContainer {
+    padding: 16px 16px 0 16px;
+    box-sizing: border-box;
+  }
+  .collapse {
+    margin: 12px 0;
+    &::before {
+      content: '';
+      cursor: pointer;
+      position: absolute;
+      top: -15px;
+      left: 0;
+      right: 0;
+      height: 31px;
+      background: transparent; 
+    }
+    &:hover {
+      .btn {
+        box-shadow: 0 0 2px rgba(64, 158, 255, 0.3);
+        color: #409eff;
+      }
+    }
+  }
+  .setter {
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+    > :global(.el-space) {
+      &:nth-child(1) {
+        flex: 1;
+      }
+    }
+    > :global(.el-space__item) {
+      width: fit-content;
+      height: auto;
+      &:nth-child(1) {
+        flex: 1;
+        > button {
+          flex: none;
+        }
+      }
+    }
+    > .end {
+      justify-content: end;
+    }
+  }
+  .tableContainer {
+    width: 100%;
+    padding: 0 16px 16px 16px;
+    box-sizing: border-box;
+    margin-top: 12px;
+  }
+}

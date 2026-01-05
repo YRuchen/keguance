@@ -1,0 +1,124 @@
+@mixin commonHeight {
+  height: 28px;
+  line-height: 28px;
+}
+
+.container {
+  width: fit-content;
+  height: 100%;
+  overflow-y: auto;
+  border-right: 1px solid #ebeef5;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  :global(.el-checkbox-group) {
+    display: flex;
+    flex-direction: column;
+  }
+  :global(.el-checkbox) {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    @include commonHeight();
+  }
+  :global(.el-checkbox:last-of-type) {
+    margin-right: 30px;
+  }
+  :global(.el-checkbox__label) {
+    color: #0C0D0E!important;
+    font-family: "PingFang SC";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    margin: 0;
+    padding-left: 8px;
+    width: calc(100% - 22px);
+    &:hover {
+      color: var(--el-color-primary)!important;
+    }
+  }
+  :global(.el-checkbox-group) {
+    gap: 8px;
+    margin-top: 8px;
+  }
+  :global(.el-collapse-item__title) {
+    @include commonHeight();
+  }
+  :global(.el-collapse-item__header) {
+    @include commonHeight();
+    gap: 0;
+    box-sizing: border-box;
+    background-color: #EBEDF0;
+    &:hover {
+      :global(.el-checkbox__label) {
+        color: var(--el-color-primary)!important;
+      }
+    }
+  }
+  :global(.el-collapse-item__content) {
+    padding-bottom: 20px;
+  }
+  :global(.el-collapse-item__arrow) {
+    margin: 0 6px 0 5px;
+  }
+  :global(.el-collapse-item__wrap) {
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 36px;
+  }
+  .title {
+    width: 100%;
+    padding: 0 0 18px 0;
+    box-sizing: border-box;
+    text-align: left;
+    color: #41464F;
+    font-family: "PingFang SC";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 22px;
+    .collapseIcon {
+      cursor: pointer;
+      &:hover {
+        color: var(--el-color-primary);
+      }
+    }
+  }
+  .collapse {
+    width: 100%;
+  }
+  .label {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .labelContent {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #0C0D0E;
+    font-family: "PingFang SC";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+  }
+  .labelNum {
+    color: #41464F;
+    text-align: center;
+    font-family: "PingFang SC";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    padding-right: 8px;
+    box-sizing: border-box;
+  }
+  .checkboxGroup {
+    padding-left: 24px;
+    box-sizing: border-box;
+  }
+}

@@ -1,0 +1,67 @@
+// 子样式.scss
+@import "@/styles/flex.scss";
+
+.container {
+  // padding: 16px;
+  // background: #f5f7fa;
+  height: fit-content;
+  width: 98%;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.chartRow {
+  display: flex;
+  gap: 20px;
+
+  // 默认两个图表时，各占50%
+  .chartCard {
+    flex: 0 0 calc(50% - 10px);
+    min-height: 307px;
+    height: 100%;
+  }
+
+  // 单个图表时占满宽度
+  &.chartRowFull .chartCard {
+    flex: 1;
+  }
+}
+
+.chartCard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 16px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  // 确保宽度计算包含 padding
+  box-sizing: border-box;
+  // 允许 flex 子元素收缩，防止内容溢出
+  min-width: 0;
+  // 防止内容溢出容器
+  overflow: hidden;
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chartTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (max-width: 1200px) {
+  .chartRow {
+    flex-direction: column;
+  }
+
+  .chartCard {
+    min-height: 350px;
+  }
+}

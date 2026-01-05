@@ -1,0 +1,31 @@
+.custom-loading-wrapper .circular {
+  animation: rotate 2s linear infinite;
+}
+
+.custom-loading-wrapper .circular .path {
+  stroke-dasharray: 62.8;
+  /* 半圆周长 */
+  stroke-dashoffset: 31.4;
+  /* 半圆起点 */
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 31.4;
+  }
+
+  50% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: 31.4;
+  }
+}

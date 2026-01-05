@@ -1,0 +1,36 @@
+.container {
+  .title {
+    font-size: 14px;
+    font-weight: bold;
+    color: rgba(28,43,52,.98);
+    border-bottom: 1px solid #e0e0e0;
+    padding: 6px 0;
+    box-sizing: border-box;
+  }
+  .checkboxList {
+    display: flex;
+    flex-direction: column;
+  }
+  .itemEmpty {
+    width: 100%;
+    height: auto;
+    min-height: 50px;
+    line-height: 50px;
+    text-align: center;
+    padding: 6px 0;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: #888;
+  }
+  .empty {
+    width: 100%;
+    height: auto;
+    min-height: 150px;
+    line-height: 150px;
+    text-align: center;
+    padding: 6px 0;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: #888;
+  }
+}

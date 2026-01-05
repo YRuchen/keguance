@@ -1,0 +1,15 @@
+.container {
+  width: 100%;
+  height: auto;
+  .circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    &.success {
+      background-color: #409eff;
+    }
+    &.fail {
+      background-color: #f56c6c;
+    }
+  }
+}

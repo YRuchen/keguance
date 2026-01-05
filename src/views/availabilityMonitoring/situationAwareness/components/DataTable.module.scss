@@ -1,0 +1,55 @@
+.dataTable {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  justify-content: space-between;
+
+  .gap {
+    justify-content: unset;
+    margin-bottom: 0;
+    gap: 8px;
+  }
+}
+
+.chartTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.filterSelect {
+  width: 120px;
+}
+
+.tableContainer {
+  flex: 1;
+  overflow: auto;
+
+  :global(.el-table__cell) {
+    padding: 5px 0 !important;
+  }
+}
+
+.domainLink {
+  color: #1677ff;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

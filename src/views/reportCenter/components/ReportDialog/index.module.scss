@@ -1,0 +1,25 @@
+.container {
+
+  :global(.el-dialog__title) {
+    font-family: PingFang SC;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    vertical-align: middle;
+  }
+
+  :global(.el-dialog__body) {
+    padding: 16px 24px;
+    box-sizing: border-box;
+  }
+
+  .content {
+    max-height: calc(80vh - 220px);
+    overflow-y: auto;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

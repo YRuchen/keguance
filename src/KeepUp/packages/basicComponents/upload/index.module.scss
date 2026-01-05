@@ -1,0 +1,12 @@
+.container {
+  :global(.el-upload--text) {
+    flex-direction: column;
+    width: 100%;
+  }
+  :global(.el-icon--upload) {
+    font-size: 67px;
+    color: #a8abb2;
+    margin-bottom: 16px;
+    line-height: 50px;
+  }
+}

@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+
+  .title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+}
+
+
+.hoverIcon {
+  width: 22px;
+  vertical-align: middle;
+
+  &:hover {
+    content: url('~/assets/image/charts/ai_entrance_hover.svg');
+  }
+}

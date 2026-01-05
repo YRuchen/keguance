@@ -1,0 +1,16 @@
+.container {
+  :global(.formily-element-plus-form-item-label) {
+    width: 100px;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+  }
+  :global(.formily-element-plus-form-item-feedback-layout-loose) {
+    margin-bottom: 12px;
+  }
+  :global(.formily-element-plus-form-item) {
+    margin-bottom: 12px;
+  }
+  :global(.formily-element-plus-form-item-control) {
+    width: calc(100% - 57px);
+  }
+}

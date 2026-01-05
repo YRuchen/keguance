@@ -1,0 +1,40 @@
+.container {
+  width: 100%;
+  min-height: 100%;
+  background-color: #fff;
+  > div {
+    height: auto!important;
+  }
+}
+.lineContainer {
+  width: 100%;
+  height: 150px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-top: 0;
+  position: absolute;
+}
+.chartContainer {
+  width: calc(100% - 32px);
+  height: 150px;
+  margin-left: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  .title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99;
+  }
+}
+.chartContainer1 {
+  width: 100%;
+  height: 150px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-top: 0;
+  position: relative;
+  top: 150px;
+}
+.extraPanel {
+  padding: 0 16px;
+  box-sizing: border-box;
+}

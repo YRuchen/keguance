@@ -1,0 +1,254 @@
+// 子样式.scss
+@import "@/styles/flex.scss";
+
+.container {
+  // padding: 16px;
+  // background: #f5f7fa;
+  height: fit-content;
+  width: 98%;
+}
+
+.section {
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.chartRow {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  // 默认两个图表时，各占50%
+  .chartCard {
+    flex: 1 1 calc(50% - 10px);
+    min-width: 0;
+    min-height: 307px;
+    // 确保在横向布局时高度能正确填充
+    height: 100%;
+  }
+
+  // 三个图表时，各占33.33%
+  &.chartRowThree .chartCard {
+    flex: 1 1 calc(33.333% - 13.33px);
+    min-width: 0;
+    min-height: 225px;
+  }
+
+  // 单个图表时占满宽度
+  &.chartRowFull .chartCard {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.pieChart1 {
+  max-width: 37.5rem;
+  min-width: 25rem;
+  margin: 0 auto;
+}
+
+.chartCard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 16px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  // 确保宽度计算包含 padding
+  box-sizing: border-box;
+  // 允许 flex 子元素收缩，防止内容溢出
+  min-width: 0;
+  // 防止内容溢出容器
+  // overflow: hidden;
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chartTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.viewDetailLink {
+  color: #1677ff;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.protocolTabs {
+  display: flex;
+  gap: 12px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.protocolTab {
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  transition: all 0.3s;
+  border: 1px solid transparent;
+
+  &:hover {
+    color: #1677ff;
+    background: #f0f7ff;
+  }
+}
+
+.protocolTabActive {
+  color: #1677ff;
+  background: #e6f4ff;
+  border-color: #1677ff;
+  font-weight: 600;
+}
+
+// 插槽的标签等样式
+
+.numText {
+  font-weight: bold;
+
+}
+
+.targeKey {
+  @extend .flex_x;
+  gap: 4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+
+.red {
+  color: $dangerColor;
+  background-color: #F56C6C1A;
+}
+
+.green {
+  color: #47C1C1;
+  background-color: #47C1C11A;
+}
+
+.blue {
+  color: $primaryColor;
+  background-color: #007DFF1A
+}
+
+.black {
+  color: #303133;
+  font-weight: 500;
+}
+
+.targeContent {
+  height: 100%;
+  max-height: 80px;
+  padding: 16px 16px;
+  border-radius: 8px;
+  @extend .flex_y;
+  gap: 16px;
+  margin-bottom: 16px;
+  font-size: .875rem;
+}
+
+.targeContent2 {
+  max-height: 50px;
+  padding: 12px 16px;
+  gap: 0;
+}
+
+.mapData {
+  width: 0;
+  min-width: 30%;
+  @extend .flex_y;
+  justify-content: unset;
+  gap: 2px;
+
+  .targeContent {
+    padding: 12px 20px;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+}
+
+.targe6 {
+  width: 0;
+  overflow: hidden;
+  min-width: 18%;
+  @extend .flex_y;
+  justify-content: unset;
+}
+
+.targe5 {
+  padding: 18px 16px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  width: 0;
+  min-width: 15%;
+  @extend .flex_y;
+  justify-content: unset;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.gradientRed {
+  background: linear-gradient(180deg, #FF0000 0%, #FFB6B7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.iconCollor {
+
+  &.gradientBlue {
+    background: linear-gradient(180deg, #007DFF 0%, #92C7FF 100%);
+  }
+
+  font-size: 20px;
+  -webkit-background-clip: text;
+  /* 注意加前缀 */
+  -webkit-text-fill-color: transparent;
+  /* 让文字透明以显示渐变 */
+  color: transparent;
+  /* 可选 */
+}
+
+// table 的筛选
+
+.filterSelect {
+  width: 120px;
+}
+
+.barChartlabel {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  gap: 20px
+}
+
+@media (max-width: 1400px) {
+  .chartRow {
+    flex-direction: column;
+  }
+
+  .chartCard {
+    min-height: 350px;
+  }
+}

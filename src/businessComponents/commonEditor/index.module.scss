@@ -1,0 +1,40 @@
+@mixin labelHeight {
+  // height: 22px!important;
+  // min-height: 22px!important;
+  // line-height: 22px!important;
+}
+
+.container {
+  :global(.formily-element-plus-form-item-label) {
+    width: var(--common-editor-label-width);
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+    @include labelHeight;
+  }
+  :global(.formily-element-plus-form-item-control-content-component) {
+    @include labelHeight;
+  }
+  :global(.formily-element-plus-space-item) {
+    @include labelHeight;
+  }
+  :global(.formily-element-plus-form-item-asterisk) {
+    @include labelHeight;
+  }
+  :global(.formily-element-plus-form-item-label-content) {
+    @include labelHeight;
+    > label {
+      @include labelHeight;
+    }
+  }
+  :global(.formily-element-plus-form-item-colon) {
+    @include labelHeight;
+  }
+  :global(.formily-element-plus-form-item) {
+    margin: var(--common-editor-label-margin);
+  }
+  :global(.el-dialog__body) {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+}

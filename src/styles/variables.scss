@@ -1,0 +1,55 @@
+// base color
+$blue: #324157;
+$light-blue: #909399;
+$red: #F56C6C;
+$pink: #e65d6e;
+$green: #67C23A;
+$tiffany: #4ab7bd;
+$yellow: #E6A23C;
+$panGreen: #67C23A;
+
+/* 全局 css 变量 */
+$primaryColor: #007DFF;
+$dangerColor: #F56C6C;
+// sidebar
+$menuText: #41464f;
+$menuActiveText: $primaryColor;
+$subMenuActiveText: $primaryColor;
+$menuBg: #f0f3f7;
+$menuHover: #e6edfa;
+$subMenuBg: #fff;
+$subMenuHover: #e6edfa;
+$subMenuItemActive: #fff;
+$subMenuItemHover: #e6edfa;
+$sideBarWidth: 220px;
+$mainHorizontalPadding: 20px;
+$borderRadiusSmall: 4px;
+$borderRadiusBase: 8px;
+$borderRadiusLarge: 16px;
+$dialogMarginTop: 7vh;
+
+:root {
+  --el-color-primary: #007DFF; // 默认态
+  --el-color-success: #67C23A; // 成功态
+  --el-color-warning: #E6A23C; // 警告态
+  --el-color-danger: #F56C6C; // 危险态
+  --el-color-info: #909399; // 信息态
+  --el-border-radius-base: 8px; // 默认圆角
+  --el-border-radius-small: 4px; // 小圆角
+  --el-border-radius-round: 8px; // 圆角
+  --el-border-radius-circle: 8px; // 圆角
+  --el-dialog-margin-top: 5vh;
+}
+
+:export {
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+  primaryColor: $primaryColor;
+  mainHorizontalPadding: $mainHorizontalPadding;
+}

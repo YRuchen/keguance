@@ -1,0 +1,957 @@
+.logSearchContainer {
+  width: 99%;
+  height: 90vh;
+  display: flex;
+  background-color: #f5f7fa;
+  position: relative;
+  flex-direction: column;
+  text-align: left;
+}
+.viewBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+
+  .viewLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .viewBadge {
+      background: rgb(217, 236, 255);
+      color: #333333;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .viewTitle {
+      background: rgb(217, 236, 255);
+      color: #333333;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+  }
+  .viewActions {
+    display: flex;
+    gap: 8px;
+  }
+}
+.viewItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.viewItem:hover {
+  background: #f5f7fa;
+}
+
+// 预定义时间选择器样式
+.pauseBtn {
+  margin: 0 8px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0;
+}
+
+.predefinedTimeBtn {
+  margin-right: 8px;
+  min-width: 80px;
+}
+
+.predefinedTimeList {
+  padding: 8px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.predefinedTimeItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin: 2px 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f5f7fa;
+  }
+}
+
+.predefinedTimeItemActive {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+}
+
+.predefinedTimeLabel {
+  font-weight: 600;
+  font-size: 14px;
+  background: #f0f0f0;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 4px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.predefinedTimeItemActive .predefinedTimeLabel {
+  background: #1890ff;
+  color: white;
+}
+
+.predefinedTimeDescription {
+  font-size: 13px;
+  color: #666;
+  flex: 1;
+  margin-left: 12px;
+}
+
+// 预定义时间显示样式
+.predefinedTimeDisplay {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.predefinedTimeBadge {
+  background: #1890ff;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.predefinedTimeText {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+// JSON 源数据样式
+.sourceJsonContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  line-height: 1.4;
+  font-size: 12px;
+}
+
+.sourceJsonItem {
+  display: inline-flex;
+  align-items: center;
+}
+
+.sourceJsonKey {
+  background: #e6f7ff;
+  color: #1890ff;
+  padding: 1px 2px;
+  border-radius: 3px;
+  margin-right: 2px;
+  border: 1px solid #91d5ff;
+}
+
+.sourceJsonValue {
+  color: #333;
+  margin-left: 2px;
+}
+
+.sourceJsonSeparator {
+  color: #999;
+  margin: 0 2px;
+}
+.mainContent {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.leftPanel {
+  width: 250px;
+  background: white;
+  padding: 10px;
+  overflow-y: auto;
+
+  .panelSection {
+    margin-bottom: 10px;
+
+    .panelHeader {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      user-select: none;
+      padding: 4px 0;
+
+      h4 {
+        margin: 0;
+        color: #606266;
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
+
+    .fieldList {
+      .fieldItem {
+        padding: 8px 12px;
+        margin-bottom: 4px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 13px;
+        position: relative;
+
+        &:hover {
+          background-color: #f0f2f5;
+        }
+
+        // 系统字段样式
+        &.systemField {
+          cursor: default;
+
+          &:hover {
+            background-color: transparent;
+          }
+        }
+      }
+      .actionIcon {
+        position: absolute;
+        right: 8px;
+        top: 53%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        color: #909399;
+      }
+
+      .fieldItem:hover .actionIcon {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.indexSelectRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  :global {
+    .el-button {
+      width: 32px;
+      height: 32px;
+    }
+    .el-icon.is-loading {
+      margin-left: 5px;
+    }
+  }
+}
+
+.indexSelect {
+  flex: 1;
+}
+
+.statusList {
+  display: flex;
+  flex-direction: column;
+  .statusRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    padding: 4px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f0f9ff;
+    }
+
+    .statusDot {
+      width: 5px;
+      height: 16px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+    .dotError {
+      background-color: #ff4d4f;
+    }
+    .dotWarn {
+      background-color: #ffb020;
+    }
+    .dotInfo {
+      background-color: #67c1ff;
+    }
+    .dotFatal {
+      background-color: #8b0000; /* 深红色，表示严重错误 */
+    }
+    .dotDebug {
+      background-color: #722ed1; /* 紫色，表示调试信息 */
+    }
+
+    .statusLabel {
+      flex: 1;
+    }
+
+    .statusCount {
+      color: #909399;
+      min-width: 20px;
+      text-align: right;
+    }
+
+    .statusAction {
+      position: absolute;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      cursor: pointer;
+      z-index: 10;
+      margin-left: 8px;
+
+      .onlyButton {
+        color: #409eff;
+        font-weight: 500;
+
+        &:hover {
+          color: #66b1ff;
+        }
+      }
+
+      .allButton {
+        color: #67c23a;
+        font-weight: 500;
+
+        &:hover {
+          color: #85ce61;
+        }
+      }
+    }
+  }
+}
+
+.rightContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  margin-left: 10px;
+  background: #ffffff;
+
+  .searchHeader {
+    padding: 10px 5px;
+    background: white;
+    border-bottom: 1px solid #e4e7ed;
+
+    .searchInputGroup {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+
+      .searchInputWrapper {
+        position: relative;
+        flex: 1;
+      }
+
+      .searchInput {
+        flex: 1;
+      }
+
+      .iconSquareBtn {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border-radius: 6px;
+      }
+      .timeRangeBtnWrapper {
+        display: flex;
+        align-items: center;
+      }
+
+      .timeRangeBtn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 300px;
+        padding: 5px 12px;
+        border: 1px solid #dcdfe6;
+        border-radius: 4px;
+        background: white;
+        cursor: pointer;
+        transition: border-color 0.3s;
+
+        &:hover {
+          border-color: #c0c4cc;
+        }
+      }
+      .timeRangeText {
+        cursor: auto;
+      }
+
+      .calendarIcon {
+        color: #909399;
+        font-size: 16px;
+      }
+
+      .timeRangeContent {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 13px;
+      }
+
+      .timePart {
+        min-width: 130px;
+        min-height: 25px;
+        line-height: 25px;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        border-bottom: 2px solid transparent;
+
+        &:hover {
+          background-color: #f5f7fa;
+        }
+      }
+
+      .timePartActive {
+        color: #1763ff;
+        border-bottom: 2px solid #1763ff;
+      }
+
+      .timePartError {
+        color: #ff4d4f !important;
+        background-color: #fff2f0 !important;
+        border-bottom: 2px solid #ff4d4f !important;
+      }
+
+      .arrowError {
+        color: #ff4d4f !important;
+      }
+
+      .arrow {
+        color: #909399;
+        font-weight: bold;
+        user-select: none;
+      }
+
+      .refreshBtn {
+        height: 36px;
+        margin-left: 0;
+      }
+    }
+    // 过滤条件容器
+    .filterConditionsContainer {
+      margin-top: 10px;
+      .filterConditions {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 4px;
+        flex-wrap: wrap;
+      }
+
+      .filterCondition {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        background: #f5f7fa;
+        border: 1px solid #e4e7ed;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #606266;
+        position: relative;
+
+        .forbiddenText {
+          color: #f56c6c;
+          font-weight: 500;
+        }
+
+        .filterText {
+          flex: 1;
+        }
+
+        .removeFilter {
+          color: #909399;
+          cursor: pointer;
+          font-size: 14px;
+          line-height: 1;
+          padding: 2px;
+          border-radius: 2px;
+          transition: all 0.2s ease;
+
+          &:hover {
+            color: #f56c6c;
+            background: #fef0f0;
+          }
+        }
+      }
+
+      .filterConditionInvalid {
+        border-color: #f56c6c;
+        background: #fef0f0;
+      }
+
+      .addFilterBtn {
+        cursor: pointer;
+        font-size: 13px;
+        color: #1763ff;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        vertical-align: middle;
+      }
+    }
+
+    // 搜索建议样式
+    .searchSuggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #e4e7ed;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      max-height: 400px;
+      overflow: hidden;
+    }
+
+    .suggestionPreview {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e4e7ed;
+    }
+
+    .previewIcon {
+      font-size: 16px;
+      margin-right: 8px;
+    }
+
+    .previewContent {
+      flex: 1;
+    }
+
+    .previewLabel {
+      font-size: 12px;
+      color: #909399;
+      margin-bottom: 2px;
+    }
+
+    .previewQuery {
+      font-size: 13px;
+      color: #303133;
+    }
+
+    .suggestionList {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .suggestionItem {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background-color 0.2s;
+
+      &:hover,
+      &.suggestionItemActive {
+        background-color: #f5f7fa;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    .suggestionContent {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .suggestionOperator {
+      flex: 0 0 80px;
+      font-weight: 500;
+      color: #303133;
+      font-size: 13px;
+    }
+
+    .suggestionSyntax {
+      flex: 0 0 200px;
+      font-size: 12px;
+      color: #606266;
+    }
+
+    .suggestionDescription {
+      flex: 1;
+      font-size: 12px;
+      color: #909399;
+      text-align: right;
+    }
+  }
+
+  /* 注意：Popover 内容被 Teleport 到 body，因此这些类不要继续嵌套在 .rightContent 下 */
+}
+
+.timePopover {
+  .timeTabBody {
+    padding: 12px;
+    color: #606266;
+  }
+}
+
+.timeAbsolute {
+  display: flex;
+  gap: 16px;
+  padding: 12px;
+}
+
+.calendarCol {
+  flex: 1;
+}
+
+.timeCol {
+  width: 120px;
+  max-height: 340px;
+  overflow-y: auto;
+  border-left: 1px solid #ebeef5;
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.timeItem {
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.timeItem:hover {
+  background: #f5f7fa;
+}
+.timeItemActive {
+  background: #f5f7fa;
+}
+
+.timeFooterRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 12px;
+  border-top: 1px solid #ebeef5;
+}
+.timeFooterRow .timeFooterValue {
+  flex: 1;
+  background: #f5f7fa;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.timeRelative {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.relativeUnitSel {
+  width: 160px;
+}
+.timeRelativeOptions {
+  padding: 0 12px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeRelativeOptionsText {
+  font-size: 13px;
+  color: #606266;
+}
+
+.timeNow {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.documentView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// 日志表格容器
+.logTableContainer {
+  flex: 1;
+}
+
+// 分页容器
+.paginationContainer {
+  padding: 5px 16px; // 减小上下内边距
+  border-top: 1px solid #e4e7ed;
+  display: flex;
+  justify-content: flex-end;
+  background: #fafafa;
+
+  // 分页组件样式优化
+  :global {
+    .el-pagination {
+      font-size: 12px; // 减小字体
+
+      .el-pagination__total,
+      .el-pagination__sizes,
+      .el-pagination__jump {
+        font-size: 12px;
+        color: #606266;
+      }
+
+      .el-pager li {
+        min-width: 24px; // 减小页码按钮宽度
+        height: 24px; // 减小页码按钮高度
+        line-height: 24px;
+        font-size: 12px;
+      }
+
+      .btn-prev,
+      .btn-next {
+        width: 24px; // 减小前后按钮宽度
+        height: 24px; // 减小前后按钮高度
+        font-size: 12px;
+      }
+
+      .el-select .el-input {
+        width: 80px; // 减小页面大小选择器宽度
+        font-size: 12px;
+      }
+
+      .el-input__inner {
+        height: 24px; // 减小输入框高度
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+// 展开图标
+.expandIcon {
+  cursor: pointer;
+  color: #606266;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #409eff;
+  }
+}
+
+// 时间单元格
+.timeCell {
+  font-size: 12px;
+  color: #606266;
+}
+
+// 消息单元格
+.messageCell {
+  font-size: 12px;
+  color: #303133;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+// 短横线单元格
+.dashCell {
+  color: #c0c4cc;
+  text-align: center;
+}
+
+// 数字单元格
+.numberCell {
+  font-size: 12px;
+  color: #409eff;
+  text-align: right;
+}
+
+// 文本单元格
+.textCell {
+  font-size: 12px;
+  color: #303133;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+// 展开内容
+.expandedContent {
+  background: #f8f9fa;
+  border-radius: 4px;
+  margin: 8px;
+}
+
+// 展开标签页
+.expandedTabs {
+  background: white;
+}
+
+// 文档表格
+
+.documentRow {
+  display: flex;
+  border-bottom: 1px solid #f0f0f0;
+  min-height: 40px;
+  align-items: center;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.documentKey {
+  flex: 0 0 200px;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  font-weight: 500;
+  color: #606266;
+  background: #fafafa;
+  position: relative;
+}
+
+.documentValue {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #303133;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+// JSON 内容
+
+.jsonHeader {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.jsonPre {
+  background: #f8f9fa;
+  border: 1px solid #e4e7ed;
+  border-radius: 4px;
+  padding: 16px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #303133;
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.viewControls {
+  padding: 16px;
+  border-bottom: 1px solid #e4e7ed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tableView,
+.jsonView,
+.singleDocumentView {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.jsonView {
+  pre {
+    margin: 0;
+    font-size: 12px;
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 4px;
+  }
+}
+
+.singleDocumentView {
+  .documentDetails {
+    .detailRow {
+      display: flex;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+
+      .detailLabel {
+        font-weight: 500;
+        color: #606266;
+        min-width: 150px;
+      }
+
+      .detailValue {
+        color: #303133;
+      }
+    }
+  }
+}
+:global {
+  .el-table--default .el-table__cell {
+    padding: 5px 0;
+  }
+  .el-tabs__header {
+    margin-bottom: 0;
+  }
+  .el-select__wrapper {
+    font-size: 13px;
+  }
+  .el-tabs__content {
+    overflow: visible;
+  }
+}
+
+// 响应式设计
+@media (max-width: 900px) {
+  .mainContent {
+    flex-direction: column;
+  }
+
+  .leftPanel {
+    width: 96%;
+    height: 200px;
+  }
+}
+// 响应式设计
+@media (max-width: 1500px) {
+  .searchInputGroup {
+    flex-direction: column;
+
+    .searchInputWrapper {
+      width: 100%;
+    }
+    .timeRangeBtnWrapper {
+      width: 100%;
+      .timeRangeBtn {
+        width: 96%;
+        min-width: auto;
+      }
+    }
+  }
+}

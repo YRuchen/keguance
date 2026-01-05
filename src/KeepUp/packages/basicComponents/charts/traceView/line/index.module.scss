@@ -1,0 +1,11 @@
+.container {
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  box-sizing: border-box;
+  &.hoverable {
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(236,245,255);
+    }
+  }
+}

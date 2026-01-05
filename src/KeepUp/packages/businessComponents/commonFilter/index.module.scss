@@ -1,0 +1,10 @@
+.container {
+  width: 100%;
+  height: auto;
+  :global(.formily-element-plus-form-item-feedback-layout-loose) {
+    margin: 0;
+  }
+  .btn {
+    margin-left: 0!important;
+  }
+}

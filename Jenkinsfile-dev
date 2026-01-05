@@ -1,0 +1,108 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'APP_VERSION', defaultValue: 'v1.1.0', description: '应用版本号，例如 v1.1.0')
+    }
+
+    environment {
+        // 获取 Git 提交哈希
+        GIT_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+        // 获取当前时间格式化为 YYYYMMDDHHMM
+        BUILD_TIME = sh(script: 'date +%Y%m%d%H%M', returnStdout: true).trim()
+        // 获取最后的提交人信息
+        GIT_COMMIT_AUTHOR = sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
+
+        // 构造镜像名称和tag
+        IMAGE_NAME = "obs-frontend"
+        IMAGE_TAG = "${params.APP_VERSION}-${GIT_COMMIT}-${BUILD_TIME}"
+        DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
+        DOCKER_REGISGTY  = "harbor.gainetics.io/observable/images/"
+        DOCKER_IMAGE_URL = "${DOCKER_REGISGTY}${DOCKER_IMAGE}"
+        
+        TELEGRAM_BOT_TOKEN = "8274385334:AAElklhX6LoVC-yZ_nYLxwa34MHoq5XuNEU"
+        TELEGRAM_CHAT_ID = "-1003004444115"
+        NODE_ENV = "${params.ENV ?: 'eks-dev'}"
+        GIT_BRANCH = "${params.BRANCH}"
+
+
+    }
+
+    stages {
+        stage('Push Docker Image to ECR') {
+            steps {
+                script {
+                    echo "编译并构建/推送容器镜像，当前分支： ${GIT_BRANCH}，当前环境：${NODE_ENV}"
+                    sh "make build-${NODE_ENV} VERSION=${IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('starview-console auto merge action issues') {
+            steps {
+                script {
+                    sh """
+                        python3 merge-request.py
+                    """
+                }
+            }
+        }
+
+        stage("对 EKS DEV 环境进行发版") {
+            when {
+                expression {NODE_ENV == 'eks-dev' }
+            }
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'f1f9d53e-9851-4d24-b6a7-d430ea03b9b0', variable: 'KUBECONFIG_FILE')]) {
+                        sh '''
+                            export KUBECONFIG=$KUBECONFIG_FILE
+                            helm upgrade --install obs-frontend ./starview-console/starview-console/helm-chart/ \
+                              --namespace scloud-obs-dev \
+                              --values ./starview-console/starview-console/values/values-dev.yaml
+                        '''
+                    }
+                }
+
+            }
+        }
+        stage("对 DEV 环境发版后进行通知") {
+            when {
+                expression {NODE_ENV == 'eks-dev' }
+            }
+            steps {
+                script {
+                    def alert_message = """
+EKS DEV 环境最新发布:
+(1)发布内容: ${env.GIT_COMMIT_MESSAGE}
+obs-frontend 组件更新
+commit id: ${env.GIT_COMMIT}
+容器镜像新tag: ${env.IMAGE_TAG}
+(2)发布提交人: ${GIT_COMMIT_AUTHOR}
+(3)发布审核人: ${GIT_COMMIT_AUTHOR}
+(4)发布执行人: ${GIT_COMMIT_AUTHOR}
+                    """
+                    // 发送消息
+                    sh(script: """
+                        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \\
+                             -d "chat_id=${TELEGRAM_CHAT_ID}" \\
+                             -d "text=${alert_message}"
+                    """)
+
+                }
+            }
+        }
+
+    }
+
+    post {
+        always {
+            echo "清理本地镜像和容器"
+            sh """
+                docker rmi -f ${env.IMAGE_NAME}
+                docker rmi -f ${env.DOCKER_IMAGE}
+                docker rmi -f ${env.DOCKER_IMAGE_URL}
+            """
+        }
+    }
+}

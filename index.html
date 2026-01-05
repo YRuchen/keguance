@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>可观测平台</title>
+  </head>
+  <body>
+    <div id="app">
+      <style>
+        .first-loading-wrp {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 90vh;
+          min-height: 90vh;
+        }
+        .first-loading-wrp .loading-wrp {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 98px;
+        }
+        .first-loading-wrp .loading-wrp img {
+          width: 350px;
+        }
+      </style>
+      <div id="vue-admin-perfect">
+        <div class="first-loading-wrp">
+          <div class="loading-wrp">
+            <img src="./src/assets/image/loading.gif" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

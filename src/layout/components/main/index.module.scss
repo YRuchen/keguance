@@ -1,0 +1,9 @@
+.appMain {
+  flex: 1;
+  display: flex;
+  overflow-y: auto;
+  width: 100%;
+  height: calc(100% - 45px) !important;
+  box-sizing: border-box;
+  border-radius: $borderRadiusLarge;
+}

@@ -1,0 +1,24 @@
+@use '../../common.scss' as common;
+
+.container {
+  height: 28px;
+  flex-shrink: 0;
+  .text {
+    flex: 1;
+    height: 100%;
+    text-align: left;
+    line-height: 28px;
+    padding-right: 24px;
+    @include common.borderLeft();
+    .operationName {
+      color: gray;
+      font-size: 12px;
+    }
+  }
+  .document {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+}

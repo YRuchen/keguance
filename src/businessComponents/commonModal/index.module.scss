@@ -1,0 +1,39 @@
+.container {
+  margin: 0;
+  padding: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  :global(.el-dialog__header) {
+    padding: 16px 24px;
+    box-sizing: border-box;
+    background-color: #F6F8FA;
+  }
+  :global(.el-dialog__title) {
+    font-family: PingFang SC;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    vertical-align: middle;
+  }
+  :global(.el-dialog__headerbtn) {
+    padding-right: 10px;
+    top: 4px;
+  }
+  :global(.el-dialog__body) {
+    padding: 16px 24px;
+    box-sizing: border-box;
+  }
+  :global(.el-dialog__footer) {
+    padding: 16px 24px;
+    box-sizing: border-box;
+    background-color: #F6F8FA;
+  }
+  .content {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
